@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "HugNamHugPla – Fish Health & Reporting",
   description: "Community fish health reporting, diagnosis, and hotspot map",
+  viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default function RootLayout({

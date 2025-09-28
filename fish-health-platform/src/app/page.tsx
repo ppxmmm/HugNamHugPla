@@ -19,6 +19,7 @@ type Report = {
   createdAt: string;
   governmentNotes?: string;
   reporterId: string;
+  imageUrl?: string;
 };
 
 type FishSpecies = {
@@ -65,7 +66,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แอ่งน้ำลึกของแม่น้ำโขง",
     description: "ปลาน้ำจืดที่ใหญ่ที่สุดในโลก ยาวได้ถึง 3 เมตร หนักกว่า 300 กก. ใกล้สูญพันธุ์อย่างยิ่งจากการทำประมงเกินขนาดและเขื่อน",
     conservationStatus: "ใกล้สูญพันธุ์อย่างยิ่ง",
-    imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาบึก.jpg"
   },
   {
     id: "2",
@@ -75,7 +76,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แม่น้ำและลำธารน้ำจืด",
     description: "ลายขวางเด่นคล้ายเสือ นิยมในตู้ปลา แต่เสี่ยงจากการสูญเสียถิ่นอาศัย",
     conservationStatus: "ใกล้สูญพันธุ์",
-    imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาเสือตอ.jpg"
   },
   {
     id: "3",
@@ -85,7 +86,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แม่น้ำสายใหญ่และทุ่งน้ำหลาก",
     description: "ปลาตระกูลตะเพียนขนาดใหญ่ ยาวได้ถึง 1.5 ม. สำคัญต่อการประมงพื้นบ้าน",
     conservationStatus: "เสี่ยงใกล้สูญพันธุ์",
-    imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาแรดแม่น้ำ.jpg"
   },
   {
     id: "4",
@@ -95,7 +96,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แม่น้ำ คู คลอง และทุ่งน้ำหลาก",
     description: "ปลาพื้นบ้านสำคัญของเอเชียตะวันออกเฉียงใต้ เลี้ยงง่าย โตเร็ว",
     conservationStatus: "มีความเสี่ยงต่ำ",
-    imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาตะเพียนขาว.jpg"
   },
   {
     id: "5",
@@ -105,7 +106,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "หนองน้ำ บึง และแม่น้ำไหลเอื่อย",
     description: "ทนทาน หายใจอากาศได้โดยตรง พบทั่วไป ใช้เป็นอาหารสำคัญ",
     conservationStatus: "มีความเสี่ยงต่ำ",
-    imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาช่อน.jpg"
   },
   {
     id: "6",
@@ -115,7 +116,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แม่น้ำและบึงน้ำจืด",
     description: "ลำตัวยาวแบนเป็นรูปมีด มีจุดลายสวยงาม นิยมเลี้ยง",
     conservationStatus: "มีความเสี่ยงต่ำ",
-    imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลากราย.jpg"
   },
   {
     id: "7",
@@ -125,7 +126,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แอ่งน้ำลึกในแม่น้ำโขง",
     description: "ปลาหนังนักล่าขนาดใหญ่ นิยมบริโภคในท้องถิ่น",
     conservationStatus: "ข้อมูลไม่เพียงพอ",
-    imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลากดคัง.jpg"
   },
   {
     id: "8",
@@ -135,7 +136,7 @@ const mekongFishSpecies: FishSpecies[] = [
     habitat: "แม่น้ำโขงตอนกลาง",
     description: "ปลาพื้นถิ่นแม่น้ำโขง กินแพลงก์ตอนพืชและสาหร่าย",
     conservationStatus: "ใกล้ถูกคุกคาม",
-    imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center"
+    imageUrl: "/ปลาเข็ง.jpg"
   }
 ];
 
@@ -168,8 +169,53 @@ export default function Home() {
   const [showChatbot, setShowChatbot] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const formRef = useRef<HTMLFormElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const captureFromCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+
+      video.addEventListener('loadedmetadata', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(video, 0, 0);
+        
+        const imageDataUrl = canvas.toDataURL('image/jpeg');
+        setSelectedImage(imageDataUrl);
+        
+        stream.getTracks().forEach(track => track.stop());
+      });
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      alert('ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบการอนุญาต');
+    }
+  };
 
   const diagnose = (text: string): { diagnosis: string[], careInstructions: string[], medicines: string[], recommendedSpecies: string[] } => {
     const t = text.toLowerCase();
@@ -258,6 +304,7 @@ export default function Home() {
       status: "Pending",
       createdAt: new Date().toISOString(),
       reporterId: sessionId || "anon",
+      imageUrl: selectedImage || undefined,
     };
     setReports((prev) => [report, ...prev]);
     formRef.current?.reset();
@@ -265,6 +312,10 @@ export default function Home() {
     setSymptoms("");
     setLat("13.736717");
     setLng("100.523186");
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
     setSubmitting(false);
   };
 
@@ -382,8 +433,8 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-gray-900 mb-2">รายงานสุขภาพปลา</h1>
               <p className="text-gray-600">รายงานปัญหาสุขภาพปลาและรับคำแนะนำการรักษา</p>
             </div>
-            <div className="flex flex-row gap-8 h-[500px]">
-              <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 h-auto lg:h-[1000px]">
+              <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-4 lg:p-6 shadow-sm">
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">สายพันธุ์</label>
@@ -411,11 +462,60 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  
+                  {/* Photo Upload Section */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">รูปถ่ายปลา</label>
+                    <div className="space-y-4">
+                      {selectedImage && (
+                        <div className="relative">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img 
+                            src={selectedImage} 
+                            alt="Selected fish" 
+                            className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                          />
+                          <button
+                            type="button"
+                            onClick={clearImage}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      )}
+                      
+                      <div className="flex gap-3">
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleImageSelect}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="flex-1 px-3 lg:px-4 py-2 border border-gray-200 rounded-xl text-xs lg:text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          📷 เลือกรูป
+                        </button>
+                        <button
+                          type="button"
+                          onClick={captureFromCamera}
+                          className="flex-1 px-3 lg:px-4 py-2 bg-green-600 text-white rounded-xl text-xs lg:text-sm font-medium hover:bg-green-700 transition-colors"
+                        >
+                          📸 ถ่ายรูป
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">ละติจูด</label>
                       <input
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full border border-gray-200 rounded-xl px-3 lg:px-4 py-2 lg:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         value={lat}
                         onChange={(e) => setLat(e.target.value)}
                       />
@@ -423,7 +523,7 @@ export default function Home() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">ลองจิจูด</label>
                       <input
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full border border-gray-200 rounded-xl px-3 lg:px-4 py-2 lg:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         value={lng}
                         onChange={(e) => setLng(e.target.value)}
                       />
@@ -446,12 +546,22 @@ export default function Home() {
                     ส่งรายงาน
                   </button>
                 </form>
-              </div>
 
                 {reports.length > 0 && (
                   <div className="mt-6 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
                     <h3 className="font-semibold text-gray-900 mb-4">ผลการวิเคราะห์ล่าสุด</h3>
                     <div className="space-y-4">
+                      {reports[0].imageUrl && (
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">รูปภาพที่รายงาน</h4>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img 
+                            src={reports[0].imageUrl} 
+                            alt="Reported fish" 
+                            className="w-full h-32 object-cover rounded-xl border border-gray-200"
+                          />
+                        </div>
+                      )}
                       <div>
                         <h4 className="font-medium text-gray-700 mb-2">การวิเคราะห์โรค (AI)</h4>
                         <ul className="list-disc ml-5 text-sm text-gray-600 space-y-1">
@@ -486,7 +596,7 @@ export default function Home() {
               </div>
               
 
-              <div className="w-[400px] h-[500px] bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <div className="w-full lg:w-[600px] h-[400px] lg:h-full bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                 <div className="h-full">
                   <Map
                     center={center}
@@ -503,6 +613,7 @@ export default function Home() {
                   />
                 </div>
               </div>
+            </div>
           </div>
         );
 
@@ -531,9 +642,19 @@ export default function Home() {
               {reports.map((report) => (
                 <div key={report.id} className="border rounded p-4">
                   <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-medium">{report.species}</h3>
-                      <p className="text-sm text-gray-600">{new Date(report.createdAt).toLocaleString()}</p>
+                    <div className="flex gap-4 items-start flex-1">
+                      {report.imageUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img 
+                          src={report.imageUrl} 
+                          alt="Report" 
+                          className="w-16 h-16 object-cover rounded-lg border border-gray-200 flex-shrink-0"
+                        />
+                      )}
+                      <div>
+                        <h3 className="font-medium">{report.species}</h3>
+                        <p className="text-sm text-gray-600">{new Date(report.createdAt).toLocaleString()}</p>
+                      </div>
                     </div>
                     <span className={`px-2 py-1 rounded text-xs ${
                       report.status === "Pending" ? "bg-red-100 text-red-800" :
@@ -573,7 +694,7 @@ export default function Home() {
         return (
           <div className="p-4 sm:p-6">
             <h2 className="text-xl font-semibold mb-4">ปลาในแม่น้ำโขง</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {mekongFishSpecies.map((fish) => (
                 <div key={fish.id} className="card p-0 overflow-hidden">
                   {fish.imageUrl && (
@@ -632,7 +753,7 @@ export default function Home() {
           <div>
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-gray-900 mb-2">ฟอรั่มชุมชน</h1>
-              <p className="text-gray-600">แบ่งปันประสบการณ์และขอคำแนะนำเกี่ยวกับสุขภาพปลา</p>
+              <p className="text-gray-600">แลกเปลี่ยนเรื่องราว แบ่งปันความรู้ และร่วมกันหาคำตอบเพื่อพัฒนาคุณภาพชีวิตของชุมชน</p>
             </div>
             
             {/* New Post Form */}
@@ -731,28 +852,28 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40">
-        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto max-w-6xl px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 lg:gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-lg">🐟</span>
             </div>
             <div>
-              <div className="font-bold text-lg text-gray-900">HugNamHugPla</div>
-              <div className="text-xs text-gray-500">รายงานสุขภาพปลาและจุดร้อน</div>
+              <div className="font-bold text-base lg:text-lg text-gray-900">HugNamHugPla</div>
+              <div className="text-xs text-gray-500 hidden sm:block">รายงานสุขภาพปลาและจุดร้อน</div>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
-            <span>โครงการนำร่อง: กรุงเทพฯ</span>
+          <div className="hidden lg:flex items-center gap-2 text-sm text-gray-500">
+            <span>โครงการนำร่อง: นครพนม</span>
           </div>
         </div>
       </header>
 
       <div className="bg-white border-b border-gray-100">
-        <div className="mx-auto max-w-6xl px-6">
-          <nav className="flex space-x-1">
+        <div className="mx-auto max-w-6xl px-4 lg:px-6">
+          <nav className="flex space-x-1 overflow-x-auto">
             <button
               onClick={() => setActiveTab("community")}
-              className={`px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
+              className={`px-3 lg:px-4 py-3 rounded-lg font-medium text-xs lg:text-sm transition-all duration-200 whitespace-nowrap ${
                 activeTab === "community"
                   ? "bg-blue-50 text-blue-600 border border-blue-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -762,7 +883,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("report")}
-              className={`px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
+              className={`px-3 lg:px-4 py-3 rounded-lg font-medium text-xs lg:text-sm transition-all duration-200 whitespace-nowrap ${
                 activeTab === "report"
                   ? "bg-blue-50 text-blue-600 border border-blue-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -772,7 +893,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("fish-info")}
-              className={`px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
+              className={`px-3 lg:px-4 py-3 rounded-lg font-medium text-xs lg:text-sm transition-all duration-200 whitespace-nowrap ${
                 activeTab === "fish-info"
                   ? "bg-blue-50 text-blue-600 border border-blue-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -782,7 +903,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("dashboard")}
-              className={`px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
+              className={`px-3 lg:px-4 py-3 rounded-lg font-medium text-xs lg:text-sm transition-all duration-200 whitespace-nowrap ${
                 activeTab === "dashboard"
                   ? "bg-blue-50 text-blue-600 border border-blue-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -794,23 +915,23 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 py-8">
+      <div className="mx-auto max-w-6xl px-4 lg:px-6 py-4 lg:py-8">
         {renderTabContent()}
       </div>
 
       {/* AI Chatbot */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-4 right-4 lg:bottom-6 lg:right-6 z-50">
         {!showChatbot ? (
           <button
             onClick={() => setShowChatbot(true)}
-            className="bg-blue-600 text-white rounded-2xl p-4 shadow-xl hover:bg-blue-700 transition-all duration-200 hover:scale-105"
+            className="bg-blue-600 text-white rounded-2xl p-3 lg:p-4 shadow-xl hover:bg-blue-700 transition-all duration-200 hover:scale-105"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </button>
         ) : (
-          <div className="bg-white rounded-2xl shadow-2xl w-80 h-96 flex flex-col border border-gray-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-72 lg:w-80 h-80 lg:h-96 flex flex-col border border-gray-200">
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-t-2xl flex justify-between items-center">
               <h3 className="font-semibold">ผู้ช่วย AI</h3>
               <button
