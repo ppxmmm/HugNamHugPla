@@ -713,7 +713,12 @@ export default function Home() {
                   )}
                   {!fish.imageUrl && (
                     <div className="w-full h-40 bg-gray-100 flex items-center justify-center">
-                      <span className="text-gray-400 text-4xl">🐟</span>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img 
+                        src="/logo.jpg" 
+                        alt="Fish placeholder" 
+                        className="w-16 h-16 object-cover opacity-50"
+                      />
                     </div>
                   )}
                   <div className="p-4">
@@ -834,7 +839,12 @@ export default function Home() {
               {discussions.filter(d => d.isPost).length === 0 && (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">💬</span>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img 
+                      src="/logo.jpg" 
+                      alt="Community" 
+                      className="w-12 h-12 object-cover rounded-full opacity-60"
+                    />
                   </div>
                   <p className="text-gray-500 text-lg">ยังไม่มีโพสต์ในชุมชน</p>
                   <p className="text-gray-400 text-sm mt-1">เริ่มต้นด้วยการถามคำถามแรก!</p>
@@ -854,8 +864,13 @@ export default function Home() {
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40">
         <div className="mx-auto max-w-6xl px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 lg:gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">🐟</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src="/logo.jpg" 
+                alt="HugNamHugPla Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="font-bold text-base lg:text-lg text-gray-900">HugNamHugPla</div>
